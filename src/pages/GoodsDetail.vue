@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" :style="{width:width+'px',height:height+'px'}">
     <div class="goods-detail">
       <img class="infoPicLeft" :src="goodsInfo.goodsPic" alt="商品图片"/>
       <div class="infoRight">
@@ -24,7 +24,7 @@
                            label="描述文字"></el-input-number>
         </div>
         <div class="infoBox">
-          <el-button style="width: 25%;height: 60px" type="danger" plain>立即购买</el-button>
+          <el-button style="width: 25%;height: 60px" type="danger" plain @click="buy">立即购买</el-button>
           <el-button style="width: 25%;height: 60px" type="warning" plain @click="addCart">加入购物车</el-button>
         </div>
       </div>
@@ -82,8 +82,9 @@
   import Radio from '../components/Radio';
   import GoodsItem from '../components/GoodsItem';
   import NumberInput from '../components/NumberInput';
-  import {getGoodsInfo, getComment, addComment,addCart} from '../api/mall';
+  import {getGoodsInfo, getComment, addComment, addCart, myData, buy} from '../api/mall';
   import {mapState, mapMutations} from 'vuex';
+  import {getClientSize} from '../util/util';
 
   export default {
     name: "GoodsDetail",
@@ -93,6 +94,12 @@
       NumberInput
     },
     computed: {
+      width() {
+        return getClientSize().width;
+      },
+      height() {
+        return getClientSize().height;
+      },
       ...mapState([
         'clientToken',
         'clientName'
@@ -146,23 +153,62 @@
       handleChange(value) {
         // console.log(value);
       },
-      addCart(){
+      buy() {
+        if (this.clientName !== "") {
+          const res = myData({
+            token: this.clientToken
+          })
+          res
+            .then((data) => {
+              if (data.address === null || data.phone === null || data.recipient === null) {
+                this.$message.error('购买失败，请到个人中心，补全信息');
+              } else {
+                const res = buy({
+                  token: this.clientToken,
+                  goodsId: this.id,
+                  specId: this.temSpecId,
+                  count: this.num
+                });
+                res
+                  .then((data) => {
+                    this.$message({
+                      message: '购买成功',
+                      type: 'success'
+                    });
+                    this.getGoodsInfo(this.id);
+                  })
+                  .catch((e) => {
+                    this.$message.error('购买失败');
+                  })
+              }
+            })
+            .catch((e) => {
+              this.$message.error('数据获取失败');
+            })
+        } else {
+          this.$message.error('请先登录');
+        }
+      },
+      addCart() {
         if (this.clientName !== "") {
           const res = addCart({
             token: this.clientToken,
             goodsId: this.id,
-            specId:this.temSpecId,
-            count:this.num,
+            specId: this.temSpecId,
+            count: this.num,
           });
           res
             .then((data) => {
-              alert("添加到购物车成功");
+              this.$message({
+                message: '添加到购物车成功',
+                type: 'success'
+              });
             })
             .catch((e) => {
-              alert(e);
+              this.$message.error('添加到购物车失败');
             })
         } else {
-          alert("请先登录");
+          this.$message.error('请先登录');
         }
       },
       add() {
@@ -176,17 +222,20 @@
             });
             res
               .then((data) => {
-                alert("评论成功");
+                this.$message({
+                  message: '评论成功',
+                  type: 'success'
+                });
                 this.getComment(this.id)
               })
               .catch((e) => {
-                alert(e);
+                this.$message.error('评论失败');
               })
           } else {
-            alert("请评论");
+            this.$message.error('请评论');
           }
         } else {
-          alert("请先登录");
+          this.$message.error('请先登录');
         }
       },
       getComment(goodsId) {
@@ -196,7 +245,7 @@
             this.commentList = data;
           })
           .catch((e) => {
-            alert(e);
+            this.$message.error('数据获取失败');
           })
       },
       getGoodsInfo(id) {
@@ -207,7 +256,7 @@
             this.temSpecId = data.specs[0].id;
           })
           .catch((e) => {
-            alert(e);
+            this.$message.error('数据获取失败');
           })
       },
     },
@@ -243,6 +292,7 @@
   .infoPicLeft {
     display: inline-block;
     width: 600px;
+    max-height: 600px;
     float: left;
   }
 

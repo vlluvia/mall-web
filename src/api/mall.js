@@ -115,6 +115,30 @@ export function getGoodsListByType(id){
       })
   })
 }
+
+export function getGoodsListByName(name){
+  const res = axios.get('/api/goods/goodsList/name/'+name);
+  return new Promise((resolve,reject)=>{
+    res
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+      })
+      .then((json)=>{
+        if(json.success === true){
+          resolve(json.data);
+        }else{
+          reject(json.error.message);
+        }
+      })
+      .catch((e)=>{
+        reject(e.toString())
+      })
+  })
+}
 export function getComment(id){
   const res = axios.get('/mall/comments/'+id);
   return new Promise((resolve,reject)=>{
@@ -324,6 +348,52 @@ export function myData(data){
 }
 export function updateData(data){
   const res = axios.post('/mall/data/update',data);
+  return new Promise((resolve,reject)=>{
+    res
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+      })
+      .then((json)=>{
+        if(json.success === true){
+          resolve(json.data);
+        }else{
+          reject(json.error.message);
+        }
+      })
+      .catch((e)=>{
+        reject(e.toString())
+      })
+  })
+}
+export function buy(data){
+  const res = axios.post('/api/goods/hotGoodsList',data);
+  return new Promise((resolve,reject)=>{
+    res
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+      })
+      .then((json)=>{
+        if(json.success === true){
+          resolve(json.data);
+        }else{
+          reject(json.error.message);
+        }
+      })
+      .catch((e)=>{
+        reject(e.toString())
+      })
+  })
+}
+export function getHotGoodsList(data){
+  const res = axios.post('/api/goods/hotGoodsList',data);
   return new Promise((resolve,reject)=>{
     res
       .then((result)=>{

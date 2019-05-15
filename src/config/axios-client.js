@@ -6,6 +6,7 @@ import router from '../router/index'
 // axios 配置
 axios.defaults.timeout = 10000;
 axios.defaults.baseURL = 'http://www.vlluvia.com:8081';
+// axios.defaults.baseURL = 'http://localhost:8081';
 
 // http request 拦截器
 axios.interceptors.request.use(

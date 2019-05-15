@@ -72,11 +72,14 @@
         });
         res
           .then((data) => {
-            alert("下单成功");
+            this.$message({
+              message: '下单成功',
+              type: 'success'
+            });
             this.getCarts();
           })
           .catch((e) => {
-            alert(e);
+            this.$message.error('下单失败');
           })
       },
       handleDelete(index, row) {
@@ -87,11 +90,14 @@
         });
         res
           .then((data) => {
-            alert("删除成功");
+            this.$message({
+              message: '删除成功',
+              type: 'success'
+            });
             this.getCarts();
           })
           .catch((e) => {
-            alert(e);
+            this.$message.error('删除失败');
           })
       },
       getCarts() {
@@ -103,7 +109,8 @@
             this.carts = data;
           })
           .catch((e) => {
-            alert(e);
+            this.$message.error('删除失败');
+
           })
       }
     },

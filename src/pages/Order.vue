@@ -8,6 +8,7 @@
       <el-tab-pane label="已完成" name="5"></el-tab-pane>
     </el-tabs>
     <el-table
+
       :data="getOrdersData"
       style="width: 100%">
       <el-table-column
@@ -83,7 +84,7 @@
             this.orders = data;
           })
           .catch((e) => {
-            alert(e);
+            this.$message.error('数据获取失败');
           })
       }
     },

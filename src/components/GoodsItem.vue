@@ -78,6 +78,10 @@ export default {
       margin-bottom: 10px;
       font-weight: 600;
       line-height: 20px;
+      max-width: 15em;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
       &:hover{
         color:@thirdColor;
       }

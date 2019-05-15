@@ -1,41 +1,53 @@
 <template>
-  <div class="home">
-    <div class="Land">
-      <el-tabs type="border-card">
-        <el-tab-pane label="登录">
-          <el-form :model="ruleForm" status-icon :rules="rules" ref="ruleForm"
-                   label-width="100px" class="demo-ruleForm">
-            <el-form-item prop="name" label="姓名">
-              <el-input v-model="ruleForm.name"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="pwd">
-              <el-input type="password" v-model="ruleForm.pwd" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitFormLogin('ruleForm')">提交</el-button>
-              <el-button @click="resetForm('ruleForm')">重置</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-        <el-tab-pane label="注册">
-          <el-form :model="ruleForm2" status-icon :rules="rules2" ref="ruleForm2"
-                   label-width="100px" class="demo-ruleForm">
-            <el-form-item prop="name" label="姓名">
-              <el-input v-model="ruleForm2.name"></el-input>
-            </el-form-item>
-            <el-form-item label="密码" prop="pwd">
-              <el-input type="password" v-model="ruleForm2.pwd" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item label="确认密码" prop="checkPwd">
-              <el-input type="password" v-model="ruleForm2.checkPwd" auto-complete="off"></el-input>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-              <el-button @click="resetForm('ruleForm2')">重置</el-button>
-            </el-form-item>
-          </el-form>
-        </el-tab-pane>
-      </el-tabs>
+  <div id="main" :style="{width:width+'px',height:height+'px'}">
+    <div class="container">
+      <div class="bgPic"></div>
+      <div class="contain login-container">
+        <el-tabs v-model="activeName">
+          <el-tab-pane label="登录" name="first">
+            <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-position="left" lalert
+                     class="demo-ruleForm ">
+              <el-form-item prop="name">
+                <el-input type="name" v-model="ruleForm.name" placeholder="账号"></el-input>
+              </el-form-item>
+              <el-form-item prop="pwd">
+                <el-input type="password" v-model="ruleForm.pwd" placeholder="密码"></el-input>
+              </el-form-item>
+              <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+              <el-form-item style="width:100%;">
+                <el-button type="primary" style="width:100%;" @click="submitFormLogin('ruleForm')">
+                  登录
+                </el-button>
+                <el-button style="width:100%; margin-left: 0;margin-top: 10px" @click="resetForm('ruleForm')">重置
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+          <el-tab-pane label="注册" name="second">
+            <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px"
+                     class="demo-ruleForm ">
+              <el-form-item prop="name">
+                <el-input type="name" v-model="ruleForm2.name" placeholder="账号"></el-input>
+              </el-form-item>
+              <el-form-item prop="pwd">
+                <el-input type="password" v-model="ruleForm2.pwd" placeholder="密码"></el-input>
+              </el-form-item>
+              <el-form-item prop="checkPwd">
+                <el-input type="password" v-model="ruleForm2.checkPwd" placeholder="确认密码" auto-complete="off"></el-input>
+              </el-form-item>
+              <el-form-item style="width:100%;">
+                <el-button type="primary" style="width:100%;"  @click="submitForm('ruleForm2')">
+                  注册
+                </el-button>
+                <el-button style="width:100%; margin-left: 0;margin-top: 10px" @click="resetForm('ruleForm2')">重置
+                </el-button>
+              </el-form-item>
+            </el-form>
+          </el-tab-pane>
+        </el-tabs>
+
+      </div>
+
     </div>
   </div>
 </template>
@@ -43,6 +55,7 @@
 
 <script>
   import {mapMutations} from 'vuex'
+  import {getClientSize} from '../util/util';
   import {login, signup} from '../api/mall';
 
   export default {
@@ -56,13 +69,19 @@
       var validatePass = (rule, value, callback) => {
         if (value === '') {
           callback(new Error('请输入密码'));
-        } else if (this.ruleForm2.checkPwd !== '') {
-          this.$refs.ruleForm2.validateField('checkPwd');
+        } else if (this.ruleForm2.pwd2 === '') {
+          callback(new Error('请输入密码'));
+        }else {
           callback();
-        } else if (this.ruleForm.checkPwd !== '') {
-          this.$refs.ruleForm.validateField('checkPwd');
-          callback();
-        } else {
+        }
+
+      };
+      var validatePass3 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else if (this.ruleForm2.pwd2 === '') {
+          callback(new Error('请输入密码'));
+        }else {
           callback();
         }
 
@@ -77,6 +96,8 @@
         }
       };
       return {
+        checked: 1,
+        activeName: 'first',
         labelPosition: 'login',
         ruleForm: {
           name: '',
@@ -89,7 +110,7 @@
         },
         rules2: {
           pwd: [
-            {required: true, validator: validatePass, trigger: 'blur'}
+            {required: true, validator: validatePass3, trigger: 'blur'}
           ],
           checkPwd: [
             {required: true, validator: validatePass2, trigger: 'blur'}
@@ -103,6 +124,15 @@
         }
       };
     },
+    computed: {
+      width() {
+        return getClientSize().width;
+      },
+      height() {
+        return getClientSize().height;
+      },
+    },
+
     methods: {
       ...mapMutations({
         setClientName: 'SET_CLIENT_NAME',
@@ -122,10 +152,10 @@
                 this.$router.push({path: '/mall'})
               })
               .catch((e) => {
-                alert(e)
+                this.$message.error('登录失败');
               })
           } else {
-            console.log('error submit!!');
+            this.$message.error('登录失败');
           }
         });
       },
@@ -143,7 +173,7 @@
                 this.$router.push({path: '/mall'})
               })
               .catch((e) => {
-                alert(e)
+                this.$message.error('注册失败');
               })
           } else {
             console.log('error submit!!');
@@ -158,27 +188,57 @@
 </script>
 
 <style scoped>
-  .home{
+  #main {
+  }
+
+  .container {
     width: 100%;
     height: 100%;
-    background-color: #1a2260;
-    background-size: 100% 100%;
+    position: relative;
   }
 
-  .topzi {
-    font-size: 40px;
-    margin-bottom: 20px;
+  .bgPic {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: url("http://www.17sucai.com/preview/66735/2018-04-23/%E6%9E%81%E5%AE%A2%E5%95%86%E5%9F%8E/img/register/b3_1.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #CCCCCC;
+    background-attachment: fixed;
   }
 
-  .Land {
-    width: 25%;
-    position: fixed;
-    top: 20%;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    /*border: 1px solid #000;*/
-    /*background-color: #1a2260;*/
-    padding: 40px;
+  .contain {
+    width: 360px;
+    height: 360px;
+    /*background: rgba(255, 255, 255, 1);*/
+    position: absolute;
+    top: 90px;
+    left: 800px;
+  }
+
+  .login-container {
+    /*box-shadow: 0 0px 8px 0 rgba(0, 0, 0, 0.06), 0 1px 0px 0 rgba(0, 0, 0, 0.02);*/
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    -moz-border-radius: 5px;
+    background-clip: padding-box;
+    margin: 180px auto;
+    width: 350px;
+    padding: 35px 35px 15px 35px;
+    background: #fff;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+  }
+
+  .remember {
+    margin: 0px 0px 35px 0px;
+  }
+
+  .title {
+    margin: 0px auto 40px auto;
+    text-align: center;
+    color: #505458;
   }
 </style>

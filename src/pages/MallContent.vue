@@ -2,11 +2,11 @@
   <div class="home">
     <div class="title">
       <img src="../../static/index1.gif" class="title-img"/>
-      <!--<div class="title-input">-->
-        <!--<el-input placeholder="请输入内容" v-model="inputText" style="float: right;">-->
-          <!--<el-button slot="append" icon="el-icon-search"></el-button>-->
-        <!--</el-input>-->
-      <!--</div>-->
+      <div class="title-input">
+        <el-input placeholder="请输入内容" v-model="inputText" style="float: right;">
+          <el-button slot="append" icon="el-icon-search" @click="searchConfirm"></el-button>
+        </el-input>
+      </div>
     </div>
     <div class="content">
       <el-tabs v-model="activeName"
@@ -43,7 +43,14 @@
       },
       get(msg) {
         this.activeName = ''+msg;
-      }
+      },
+      searchConfirm() {
+        if (this.inputText.trim().length <= 0) {
+          this.$message.error('输入不能为空');
+          return;
+        }
+        this.$router.push(`/mall/goodsList/0/${this.inputText}`);
+      },
     },
     watch: {
       activeName: function (val) { //监听切换状态-计划单

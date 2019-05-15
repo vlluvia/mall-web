@@ -9,6 +9,14 @@
       <el-form-item label="账号：">
         <el-input disabled v-model="form.account">1111@qq.com</el-input>
       </el-form-item>
+      <el-form-item label="个人喜好">
+        <el-checkbox-group v-model="form.userGoodsTypeLike">
+          <el-checkbox-button label="1" name="type" key="1">时尚服装</el-checkbox-button>
+          <el-checkbox-button label="2" name="type" key="2">数码产品</el-checkbox-button>
+          <el-checkbox-button label="3" name="type" key="3">食品饮料</el-checkbox-button>
+          <el-checkbox-button label="4" name="type" key="4">家用电器</el-checkbox-button>
+        </el-checkbox-group>
+      </el-form-item>
       <el-form-item label="收件人：">
         <el-input v-model="form.recipient">张三</el-input>
       </el-form-item>
@@ -45,6 +53,7 @@
           address: '',
           phone: '',
           password: '',
+          userGoodsTypeLike:[]
         }
       }
     },
@@ -67,7 +76,8 @@
             this.form = data
           })
           .catch((e) => {
-            alert(e)
+            this.$message.error('数据获取失败');
+
           })
       },
       onSubmit(form) {
@@ -82,17 +92,21 @@
               address: this.form.address,
               phone: this.form.phone,
               password: this.form.password,
+              userGoodsTypeLike:this.form.userGoodsTypeLike
             })
             res
               .then((data) => {
-                alert("更改成功");
+                this.$message({
+                  message: '更改成功',
+                  type: 'success'
+                });
                 if(data ==="logout"){
                   this.clientLogout();
                   this.$router.push("/login");
                 }
               })
               .catch((e) => {
-                alert(e)
+                this.$message.error('更改失败');
               })
           } else {
             console.log('error submit!!');

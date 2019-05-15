@@ -27,7 +27,7 @@
 
 <script>
   import GoodsItem from '../components/GoodsItem';
-  import {getGoodsListByType} from '../api/mall';
+  import {getGoodsListByType,getGoodsListByName} from '../api/mall';
 
   export default {
     name: "GoodsList",
@@ -66,9 +66,7 @@
         }
       }
     },
-    mounted(){
-      this.getGoodsList(this.typeId);
-    },
+
     methods: {
       changeSortMode(mode) {
         if (mode === 3) {
@@ -84,7 +82,21 @@
             this.goodsList = data;
           })
           .catch((e)=>{
-            alert(e);
+            this.$message.error('数据获取失败');
+          })
+      }
+    },
+    mounted(){
+      if(!this.isSearchPage) {
+        this.getGoodsList(this.typeId);
+      }else{
+        const res = getGoodsListByName(this.keyword);
+        res
+          .then((data)=>{
+            this.goodsList = data;
+          })
+          .catch((e)=>{
+            this.$message.error('数据获取失败');
           })
       }
     },
@@ -95,8 +107,14 @@
           this.getGoodsList(this.typeId);
           // this.goodsId=this.typeId;
         }else{
-          this.goodsId=to.params.keyword;
-          // this.searchGoods(to.params.keyword);
+          const res = getGoodsListByName(this.keyword);
+          res
+            .then((data)=>{
+              this.goodsList = data;
+            })
+            .catch((e)=>{
+              this.$message.error('数据获取失败');
+            })
         }
       }
     }
