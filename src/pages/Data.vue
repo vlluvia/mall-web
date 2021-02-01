@@ -129,7 +129,7 @@
 
 <style scoped>
   .data {
-    width: 40%;
+    /*width: 40%;*/
     margin: 20px 20px;
     padding: 20px 20px;
   }

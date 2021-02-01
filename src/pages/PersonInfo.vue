@@ -43,7 +43,7 @@
     padding: 20px 0;
     display: inline-block;
     overflow: hidden;
-    margin-left: 300px;
+    margin-left: 150px;
   }
 
   li {

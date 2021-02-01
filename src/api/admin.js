@@ -77,7 +77,9 @@ export function delGoods(data){
 export function addGoods(data){
   return basePost("/api/goods/add",data);
 }
-
+export function updateGoods(data){
+  return basePost("/api/goods/update",data);
+}
 export function getAdminGoods(data){
   return baseGet("/api/admin/goods/"+data)
 }

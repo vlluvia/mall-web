@@ -215,7 +215,7 @@
     /*background: rgba(255, 255, 255, 1);*/
     position: absolute;
     top: 90px;
-    left: 800px;
+    left: 35%;
   }
 
   .login-container {
@@ -224,8 +224,8 @@
     border-radius: 5px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
-    margin: 180px auto;
-    width: 350px;
+    /*margin: 180px auto;*/
+    /*width: 350px;*/
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;

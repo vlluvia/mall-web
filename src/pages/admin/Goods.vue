@@ -37,10 +37,10 @@
     data() {
       return {
         typeList: [
-          {name: '时尚服装', id: 1},
-          {name: '数码产品', id: 2},
-          {name: '食品饮料', id: 3},
-          {name: '家用电器', id: 4}
+          {name: '北京', id: 1},
+          {name: '上海', id: 2},
+          {name: '杭州', id: 3},
+          {name: '深圳', id: 4}
         ],
         activeName: "1",
         goodsList: [],
@@ -49,7 +49,7 @@
     },
     methods: {
       editGoods(i){
-        this.$router.push({path: '/mall-admin/goods/'+i})
+        this.$router.push({path: '/mall-admin/goods/update/'+i})
       },
       addGoods(){
         this.$router.push({path: '/mall-admin/goods/0'})
@@ -114,6 +114,7 @@
 
   .image {
     width: 100%;
+    height: 230px;
     display: block;
   }
   .buttons{

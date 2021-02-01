@@ -117,7 +117,7 @@
     position: absolute;
     width: 100%;
     height: 100%;
-    background-image: url("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1555688340530&di=e8761b3fc7a4e6b84eeb4084332a551a&imgtype=0&src=http%3A%2F%2Fwww.uimaker.com%2Fuploads%2Fuserup%2F0%2F1413012235-43G.png");
+    background-image: url("http://01.minipic.eastday.com/20170508/20170508000002_d41d8cd98f00b204e9800998ecf8427e_7.jpeg");
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -131,7 +131,7 @@
     /*background: rgba(255, 255, 255, 1);*/
     position: absolute;
     top: 90px;
-    left: 800px;
+    left: 450px;
   }
 
   .login-container {
@@ -140,8 +140,8 @@
     border-radius: 10px;
     -moz-border-radius: 5px;
     background-clip: padding-box;
-    margin: 180px auto;
-    width: 450px;
+    /*margin: 180px auto;*/
+    /*width: 450px;*/
     padding: 35px 35px 15px 35px;
     background: #fff;
     border: 1px solid #eaeaea;

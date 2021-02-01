@@ -1,7 +1,10 @@
 <template>
   <div class="home" :style="{width:width+'px',height:height+'px'}">
     <div class="goods-detail">
-      <img class="infoPicLeft" :src="goodsInfo.goodsPic" alt="商品图片"/>
+      <span class="infoPicLeft" >
+        <img class="infoPicLeft_pic" :src="goodsInfo.goodsPic" alt="商品图片"/>
+      </span>
+
       <div class="infoRight">
         <div class="infoBox">
           <h3 class="name">{{goodsInfo.goodsName}}</h3>
@@ -68,7 +71,7 @@
               :rows="2"
               placeholder="请输入内容"
               v-model="evaluateText"></el-input>
-            <el-button style="width: 100px;height: 65px" type="success" @click="add">评论</el-button>
+            <el-button style="float: right; margin-right: 80px;margin-top: 20px;margin-bottom: 30px;" type="success" @click="add">评论</el-button>
           </div>
         </el-tab-pane>
 
@@ -290,12 +293,17 @@
   }
 
   .infoPicLeft {
-    display: inline-block;
-    width: 600px;
-    max-height: 600px;
-    float: left;
-  }
+    /*display: inline-block;*/
+    width: 430px;
+    height: 650px;
+    vertical-align: center
 
+  }
+  .infoPicLeft_pic{
+    width: 430px;
+    max-height: 430px;
+    margin-top: 100px;
+  }
   .infoRight {
     display: inline-block;
     float: right;
@@ -384,7 +392,7 @@
 
   .evaluate {
     width: 100%;
-    height: 300px;
+    height: 200px;
     margin-top: 10px;
     /*background-color: red;*/
     /*padding-left: 40px;*/

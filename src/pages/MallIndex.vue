@@ -13,7 +13,7 @@
         <SectionHeader title="人气推荐" tips="最火最潮商品，为您挑选" moreText="更多推荐>"/>
         <Slick
           :ulWidth="(266*11)+(10*(12-1))"
-          :showWidth="(266*6)+(10*2)"
+          :showWidth="(266*4)+(10*2)"
           :height="360"
         >
           <ul class="goodsList" :style="{width:`${(266*12)+(10*(11))}px`}" slot="list">
@@ -48,130 +48,130 @@
 </template>
 
 <script>
-  import SectionHeader from '../components/SectionHeader';
-  import GoodsItem from '../components/GoodsItem';
-  import Slick from '../components/Slick';
-  import ZoomImg from '../components/ZoomImg';
+import SectionHeader from '../components/SectionHeader';
+import GoodsItem from '../components/GoodsItem';
+import Slick from '../components/Slick';
+import ZoomImg from '../components/ZoomImg';
 
-  import {getGoods,getHotGoodsList} from '../api/mall';
-  import {mapState, mapMutations} from 'vuex';
+import {getGoods, getHotGoodsList} from '../api/mall';
+import {mapState, mapMutations} from 'vuex';
 
-  export default {
-    name: "MallIndex",
-    components: {
-      SectionHeader,
-      GoodsItem,
-      Slick,
-      ZoomImg,
-    },
-    computed:{
-      ...mapState([
-        'clientToken',
-        'clientName'
-      ]),
-    },
-    mounted() {
-      const res = getGoods();
-      res
+export default {
+  name: "MallIndex",
+  components: {
+    SectionHeader,
+    GoodsItem,
+    Slick,
+    ZoomImg,
+  },
+  computed: {
+    ...mapState([
+      'clientToken',
+      'clientName'
+    ]),
+  },
+  mounted() {
+    const res = getGoods();
+    res
+      .then((data) => {
+        this.goodsList = data;
+        this.hotGoodsList = this.goodsList.slice(10, 22);
+      })
+      .catch((e) => {
+        this.$message.error('数据获取失败');
+      });
+
+    if (this.clientName !== "") {
+      const res2 = getHotGoodsList({
+        token: this.clientToken
+      })
+      res2
         .then((data) => {
-          this.goodsList = data;
-          this.hotGoodsList = this.goodsList.slice(10,22);
+          this.hotGoodsList = data;
         })
         .catch((e) => {
           this.$message.error('数据获取失败');
         });
+    }
 
-      if (this.clientName !== "") {
-        const res2 = getHotGoodsList({
-          token: this.clientToken
-        })
-        res2
-          .then((data) => {
-            this.hotGoodsList = data;
-          })
-          .catch((e) => {
-            this.$message.error('数据获取失败');
-          });
-      }
+  },
+  methods: {
 
+    filterGoodsByType(typeid) {
+      return this.goodsList.filter((item) => {
+        return item.typeId === typeid;
+      });
     },
-    methods: {
-
-      filterGoodsByType(typeid) {
-        return this.goodsList.filter((item) => {
-          return item.typeId === typeid;
-        });
-      },
-      navTo(route) {
-        this.$router.push(route);
-      },
-      selectType(typeId) {
-        if (typeId == -1) {
-          return;
-        }
-        this.$emit('child-msg', typeId);
-        this.navTo('/mall/goodsList/' + typeId + '/all');
-      },
+    navTo(route) {
+      this.$router.push(route);
     },
-    data() {
-      return {
-        searchText: '',
-        tips: ['aa', 'bb', 'cc'],
-        typeList: [
-          {name: '首页', id: 0},
-          {name: '时尚服装', id: 1},
-          {name: '数码产品', id: 2},
-          {name: '食品饮料', id: 3},
-          {name: '家用电器', id: 4}
-        ],
-        carouselData: [
-          {url: require('../assets/img/banner1.jpg'), title: '图1', id: 1},
-          {url: require('../assets/img/banner2.jpg'), title: '图2', id: 2},
-          {url: require('../assets/img/banner3.jpg'), title: '图3', id: 3},
-        ],
-        goodsList: [],
-        hotGoodsList:[]
+    selectType(typeId) {
+      if (typeId == -1) {
+        return;
       }
+      this.$emit('child-msg', typeId);
+      this.navTo('/mall/goodsList/' + typeId + '/all');
+    },
+  },
+  data() {
+    return {
+      searchText: '',
+      tips: ['aa', 'bb', 'cc'],
+      typeList: [
+        {name: '首页', id: 0},
+        {name: '北京', id: 1},
+        {name: '上海', id: 2},
+        {name: '杭州', id: 3},
+        {name: '深圳', id: 4}
+      ],
+      carouselData: [
+        {url: require('../assets/img/banner1.jpg'), title: '图1', id: 1},
+        {url: require('../assets/img/banner2.jpg'), title: '图2', id: 2},
+        {url: require('../assets/img/banner3.jpg'), title: '图3', id: 3},
+      ],
+      goodsList: [],
+      hotGoodsList: []
     }
   }
+}
 </script>
 <style>
-  @import "../assets/css/var.less";
+@import "../assets/css/var.less";
 
-  .home {
-    width: 100%;
-    height: 100%;
-  }
+.home {
+  width: 100%;
+  height: 100%;
+}
 
-  .el-carousel__container {
-    height: 100%;
-  }
+.el-carousel__container {
+  height: 100%;
+}
 
-  .carouselBlock {
-    width: 90%;
-    height: 600px;
-    position: relative;
-    margin: 0 auto;
-  }
+.carouselBlock {
+  width: 90%;
+  height: 600px;
+  position: relative;
+  margin: 0 auto;
+}
 
-  .carouselImg {
-    height: 100%;
-    width: 100%;
-  }
+.carouselImg {
+  height: 100%;
+  width: 100%;
+}
 
-  .home-title {
-    width: 100%;
-    height: 600px;
-  }
+.home-title {
+  width: 100%;
+  height: 600px;
+}
 
-  .container {
-    width: 90%;
-    margin: 0 auto;
-  }
+.container {
+  width: 90%;
+  margin: 0 auto;
+}
 
-  .section {
-    padding: 10px;
-    margin: 0 auto;
-  }
+.section {
+  padding: 10px;
+  margin: 0 auto;
+}
 
 </style>

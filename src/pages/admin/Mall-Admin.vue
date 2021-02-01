@@ -111,7 +111,7 @@
   }
   .left-content{
     margin-left: 5%;
-    width: 350px;
+    width: 300px;
     display: inline-block;
     overflow: hidden;
   }
