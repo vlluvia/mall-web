@@ -115,9 +115,77 @@ export function getGoodsListByType(id){
       })
   })
 }
-
+export function getGoodsTypeList(){
+  const res = axios.get('admin/mall/city');
+  return new Promise((resolve,reject)=>{
+    res
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+      })
+      .then((json)=>{
+        if(json.success === true){
+          resolve(json.data);
+        }else{
+          reject(json.error.message);
+        }
+      })
+      .catch((e)=>{
+        reject(e.toString())
+      })
+  })
+}
+export function getGoodsTypeListClient(){
+  const res = axios.get('admin/mall/city/client');
+  return new Promise((resolve,reject)=>{
+    res
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+      })
+      .then((json)=>{
+        if(json.success === true){
+          resolve(json.data);
+        }else{
+          reject(json.error.message);
+        }
+      })
+      .catch((e)=>{
+        reject(e.toString())
+      })
+  })
+}
+export function insertGoodsTypeList(city_name){
+  const res = axios.post('/admin/mall/city/add', city_name);
+  return new Promise((resolve,reject)=>{
+    res
+      .then((result)=>{
+        if(result.status===200){
+          return result.data;
+        }else{
+          reject(result.status)
+        }
+      })
+      .then((json)=>{
+        if(json.success === true){
+          resolve(json.data);
+        }else{
+          reject(json.error.message);
+        }
+      })
+      .catch((e)=>{
+        reject(e.toString())
+      })
+  })
+}
 export function getGoodsListByName(name){
-  const res = axios.get('/api/goods/goodsList/name/'+name);
+  const res = axios.post('/api/goods/goodsList/name/'+name);
   return new Promise((resolve,reject)=>{
     res
       .then((result)=>{

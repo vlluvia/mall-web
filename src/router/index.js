@@ -13,6 +13,7 @@ import Data from '@/pages/Data'
 import Admin from '@/pages/admin/Admin'
 import Mall_Admin from '@/pages/admin/Mall-Admin'
 import Goods_Admin from '@/pages/admin/Goods'
+import Goods_City_Admin from '@/pages/admin/GoodsCity'
 import Orders_Admin from '@/pages/admin/Orders'
 import Users_Admin from '@/pages/admin/Users'
 import Comments_Admin from '@/pages/admin/Comments'
@@ -62,6 +63,10 @@ export default new Router({
           path: 'goods/:goodsId',
           name: 'GoodsAddEdit_Admin',
           component: GoodsAddEdit_Admin
+        },{
+          path: 'city',
+          name: 'Goods_City_Admin',
+          component: Goods_City_Admin
         },{
           path: 'goods/update/:goodsId',
           name: 'GoodsUpdateEdit_Admin',

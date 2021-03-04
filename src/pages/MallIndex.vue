@@ -29,7 +29,7 @@
           </ul>
         </Slick>
       </section>
-      <section class="typeSection section" v-for="(item,index) in typeList.slice(1)" :key="item.id">
+      <section class="typeSection section" v-for="(item,index) in typeList.slice(1,4)" :key="item.id">
         <SectionHeader :title="item.name" tips="" moreText="查看更多>" @click.native="selectType(item.id)"/>
         <ul class="content">
           <GoodsItem
@@ -52,6 +52,7 @@ import SectionHeader from '../components/SectionHeader';
 import GoodsItem from '../components/GoodsItem';
 import Slick from '../components/Slick';
 import ZoomImg from '../components/ZoomImg';
+import {getGoodsTypeListClient} from '../api/mall';
 
 import {getGoods, getHotGoodsList} from '../api/mall';
 import {mapState, mapMutations} from 'vuex';
@@ -71,6 +72,7 @@ export default {
     ]),
   },
   mounted() {
+    this.getGoodsType();
     const res = getGoods();
     res
       .then((data) => {
@@ -111,18 +113,27 @@ export default {
       }
       this.$emit('child-msg', typeId);
       this.navTo('/mall/goodsList/' + typeId + '/all');
-    },
+    }, getGoodsType() {
+      const res = getGoodsTypeListClient();
+      res
+        .then((data) => {
+          this.typeList = data;
+        })
+        .catch((e) => {
+          this.$message.error('商品获取失败');
+        })
+    }
   },
   data() {
     return {
       searchText: '',
       tips: ['aa', 'bb', 'cc'],
       typeList: [
-        {name: '首页', id: 0},
-        {name: '北京', id: 1},
-        {name: '上海', id: 2},
-        {name: '杭州', id: 3},
-        {name: '深圳', id: 4}
+        // {name: '首页', id: 0},
+        // {name: '北京', id: 1},
+        // {name: '上海', id: 2},
+        // {name: '杭州', id: 3},
+        // {name: '深圳', id: 4}
       ],
       carouselData: [
         {url: require('../assets/img/banner1.jpg'), title: '图1', id: 1},

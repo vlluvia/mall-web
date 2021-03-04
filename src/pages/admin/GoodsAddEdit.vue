@@ -9,16 +9,14 @@
       </el-form-item>
       <el-form-item
         prop="goodsName"
-        label="商品类型："
+        label="城市："
         :rules="{required: true, message: '不能为空', trigger: 'blur'}">
         <el-select
           prop="goodsTypeId"
           v-model="formName.goodsTypeId"
-          placeholder="商品类型">
-          <el-option label="时尚服装" value="1"></el-option>
-          <el-option label="数码产品" value="2"></el-option>
-          <el-option label="食品饮料" value="3"></el-option>
-          <el-option label="家用电器" value="4"></el-option>
+          value=1
+          placeholder="城市">
+          <el-option v-for="(item,index) in typeList" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item
@@ -66,7 +64,7 @@
 <script>
 
   import {addGoods,getAdminGoods} from '../../api/admin';
-
+  import {getGoodsTypeListClient} from '../../api/mall';
   export default {
     name: "GoodsAddEdit",
     data() {
@@ -81,7 +79,14 @@
             goodsStack: 0,
             goodsSizePrice: 0.0
           }]
-        }
+        },
+        typeList: [
+          // {name: '首页', id: 0},
+          // {name: '北京', id: 1},
+          // {name: '上海', id: 2},
+          // {name: '杭州', id: 3},
+          // {name: '深圳', id: 4}
+        ],
       }
     },
     methods: {
@@ -123,9 +128,19 @@
           goodsSizePrice: 0.0,
           key: Date.now()
         });
+      }, getGoodsType() {
+        const res = getGoodsTypeListClient();
+        res
+          .then((data) => {
+            this.typeList = data;
+          })
+          .catch((e) => {
+            this.$message.error('商品获取失败');
+          })
       }
     },
     mounted() {
+      this.getGoodsType();
       if (this.$route.params.goodsId !== '0') {
         const res = getAdminGoods(this.$route.params.goodsId);
         res

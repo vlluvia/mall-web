@@ -8,6 +8,7 @@
     </el-tabs>
     <div class="content">
       <el-button type="success" plain style="margin-bottom: 20px" @click="addGoods">新增商品</el-button>
+      <el-button type="success" plain style="margin-bottom: 20px" @click="addCity">新增城市</el-button>
       <el-row>
         <el-col
           v-loading="loading"
@@ -15,7 +16,7 @@
           <el-card :body-style="{ padding: '0px' }">
             <img :src="item.img" class="image">
             <div style="padding: 14px;">
-              <span>{{item.name}}</span>
+              <span>{{ item.name }}</span>
               <div class="buttons">
                 <el-button type="primary" plain @click="editGoods(item.id)">编辑</el-button>
                 <el-button type="danger" plain @click="deleteGoods(item.id)"> 删除</el-button>
@@ -29,96 +30,137 @@
 </template>
 
 <script>
-  import {getGoodsListByType} from '../../api/mall';
-  import {delGoods} from '../../api/admin';
+import {getGoodsListByType} from '../../api/mall';
+import {getGoodsTypeList} from '../../api/mall';
+import {insertGoodsTypeList} from '../../api/mall';
+import {delGoods} from '../../api/admin';
 
-  export default {
-    name: "Goods",
-    data() {
-      return {
-        typeList: [
-          {name: '北京', id: 1},
-          {name: '上海', id: 2},
-          {name: '杭州', id: 3},
-          {name: '深圳', id: 4}
-        ],
-        activeName: "1",
-        goodsList: [],
-        loading: true,
-      }
+export default {
+  name: "Goods",
+  data() {
+    return {
+      typeList: [
+        // {name: '北京', id: 1},
+        // {name: '上海', id: 2},
+        // {name: '杭州', id: 3},
+        // {name: '深圳', id: 4}
+      ],
+      activeName: "1",
+      goodsList: [],
+      loading: true,
+    }
+  },
+  methods: {
+    editGoods(i) {
+      this.$router.push({path: '/mall-admin/goods/update/' + i})
     },
-    methods: {
-      editGoods(i){
-        this.$router.push({path: '/mall-admin/goods/update/'+i})
-      },
-      addGoods(){
-        this.$router.push({path: '/mall-admin/goods/0'})
-      },
-      deleteGoods(id) {
-        const res = delGoods(id);
-        res
-          .then((data)=>{
-            this.$message({
-              message: '删除成功',
-              type: 'success'
-            });
-            this.getGoodsList(this.activeName)
-          })
-          .catch((e)=>{
-            this.$message.error('删除失败');
-          })
-      },
-      getGoodsList(id){
-        const res = getGoodsListByType(id);
-        res
-          .then((data)=>{
-            this.goodsList = data;
-            this.loading = false;
-          })
-          .catch((e)=>{
-            this.$message.error('商品获取失败');
-          })
-      }
+    addGoods() {
+      this.$router.push({path: '/mall-admin/goods/0'})
     },
-    mounted(){
+    addCity() {
+      this.$prompt('请添加城市', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
+      }).then(({value}) => {
+        this.insertGoodsType(value)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '取消输入'
+        });
+      });
+    },
+    deleteGoods(id) {
+      const res = delGoods(id);
+      res
+        .then((data) => {
+          this.$message({
+            message: '删除成功',
+            type: 'success'
+          });
+          this.getGoodsList(this.activeName)
+        })
+        .catch((e) => {
+          this.$message.error('删除失败');
+        })
+    },
+    getGoodsList(id) {
+      const res = getGoodsListByType(id);
+      res
+        .then((data) => {
+          this.goodsList = data;
+          this.loading = false;
+        })
+        .catch((e) => {
+          this.$message.error('商品获取失败');
+        })
+    }
+    ,
+    getGoodsType() {
+      const res = getGoodsTypeList();
+      res
+        .then((data) => {
+          this.typeList = data;
+          this.getGoodsList(this.activeName);
+        })
+        .catch((e) => {
+          this.$message.error('商品获取失败');
+        })
+    },
+    insertGoodsType(city_name) {
+      const res = insertGoodsTypeList({
+        token: this.clientToken,
+        city_name: city_name
+      });
+      res
+        .then((data) => {
+          this.typeList = data;
+        })
+        .catch((e) => {
+          this.$message.error('商品获取失败');
+        })
+    }
+  },
+  mounted() {
+    this.getGoodsType();
+  },
+  watch: {
+    $route(to, from) {
+      this.activeName = this.$route.params.typeId;
       this.getGoodsList(this.activeName);
     },
-    watch: {
-      $route(to, from) {
-        this.activeName = this.$route.params.typeId;
-        this.getGoodsList(this.activeName);
-      },
-      activeName: function (val) {
-        this.activeName =  '' +val;
-        this.getGoodsList(val);
-      },
-    }
+    activeName: function (val) {
+      this.activeName = '' + val;
+      this.getGoodsList(val);
+    },
   }
+}
 </script>
 
 <style scoped>
-  .time {
-    font-size: 13px;
-    color: #999;
-  }
+.time {
+  font-size: 13px;
+  color: #999;
+}
 
-  .bottom {
-    margin-top: 13px;
-    line-height: 12px;
-  }
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
+}
 
-  .button {
-    padding: 0;
-    float: right;
-  }
+.button {
+  padding: 0;
+  float: right;
+}
 
-  .image {
-    width: 100%;
-    height: 230px;
-    display: block;
-  }
-  .buttons{
-    width: 100%;
-    margin-top: 5px;
-  }
+.image {
+  width: 100%;
+  height: 230px;
+  display: block;
+}
+
+.buttons {
+  width: 100%;
+  margin-top: 5px;
+}
 </style>
